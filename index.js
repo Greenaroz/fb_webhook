@@ -101,18 +101,18 @@ function handleMessage(sender_psid, received_message) {
              "payload": {
                "template_type": "generic",
                "elements": [{
-                 "title": "Is this the right picture?",
-                 "subtitle": "Tap a button to answer.",
+                 "title": "Generic Template Testing",
+                 "subtitle": "Do you want to keep in touch?",
                  "image_url": attachment_url,
                  "buttons": [
                    {
                      "type": "postback",
-                     "title": "Yes!",
+                     "title": "Contact Me",
                      "payload": "yes",
                    },
                    {
                      "type": "postback",
-                     "title": "No!",
+                     "title": "No means No!",
                      "payload": "no",
                    }
                  ],
@@ -128,6 +128,20 @@ function handleMessage(sender_psid, received_message) {
 
 // Handles messaging_postbacks events
 function handlePostback(sender_psid, received_postback) {
+
+let response;
+
+ // Get the payload for the postback
+ let payload = received_postback.payload;
+
+ // Set the response based on the postback payload
+ if (payload === 'yes') {
+   response = { "text": "Cool. Added you to our contact list!" }
+ } else if (payload === 'no') {
+   response = { "text": "Oh well. Your loss." }
+ }
+ // Send the message to acknowledge the postback
+ callSendAPI(sender_psid, response);
 
 }
 
