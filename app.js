@@ -32,12 +32,14 @@ app.post('/webhook', (req, res) => {
       // will only ever contain one message, so we get index 0
       if(entry.changes) {
         webhook_event = entry.changes[0];
+        console.log('FIELD = ' + webhook_event.field);
+        console.log('VALUE = ' + webhook_event.value);
       }
       else if (entry.messaging) {
         webhook_event = entry.messaging[0];
       }
 
-      console.log('WEBHOOK = ' + webhook_event);
+
     });
 
     // Returns a '200 OK' response to all requests
