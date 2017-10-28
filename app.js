@@ -31,9 +31,10 @@ app.post('/webhook', (req, res) => {
       // Gets the message. entry.messaging is an array, but
       // will only ever contain one message, so we get index 0
       if(entry.changes) {
-        webhook_event = entry.changes[0];
-        console.log('FIELD = ' + webhook_event.field);
-        console.log('VALUE = ' + webhook_event.value);
+        let change = entry.changes[0];
+        if(change.field && change.field === 'feed' && change.value.item === 'comment') {
+          console.log('MESSAGE = ' + change.value.message);
+        }
       }
       else if (entry.messaging) {
         webhook_event = entry.messaging[0];
