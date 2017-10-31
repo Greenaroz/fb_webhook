@@ -36,7 +36,7 @@ app.post('/webhook', (req, res) => {
         if(change.field && change.field === 'feed' && change.value.item === 'comment') {
           let sender_id =  change.value.sender_id;
           console.log('MESSAGE = ' + sender_id);
-          handleCommentPrivateReply(change.value.comment_id, change.value.message);
+          handleCommentPrivateReply(change.value.commen_id, change.value.message);
         }
       }
       else if (entry.messaging) {
@@ -123,4 +123,33 @@ function replyToComment(post_comment_id, response){
     }
   });
 
+}
+
+fucntion replyToCommentHybrid(post_comment_id){
+
+  let response = {
+    "attachment": {
+      "type": "template",
+      "payload": {
+        "template_type": "generic",
+        "elements": [{
+          "title": "Generic Template Testing",
+          "subtitle": "Do you want to keep in touch?",
+          "image_url": "https://wallpaperbrowse.com/media/images/cool-pictures-24.jpg",
+          "buttons": [
+            {
+              "type": "postback",
+              "title": "Contact Me",
+              "payload": "yes",
+            },
+            {
+              "type": "postback",
+              "title": "No means No!",
+              "payload": "no",
+            }
+          ],
+        }]
+      }
+    }
+  }
 }
