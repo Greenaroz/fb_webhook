@@ -32,8 +32,11 @@ app.post('/webhook', (req, res) => {
       // will only ever contain one message, so we get index 0
       if(entry.changes) {
         let change = entry.changes[0];
+
         if(change.field && change.field === 'feed' && change.value.item === 'comment') {
-          console.log('MESSAGE = ' + change.value.message);
+          let sender_id =  change.value.sender_id;
+          console.log('MESSAGE = ' + sender_id);
+          handleMessage(change.value.post_id, change.value.message);
         }
       }
       else if (entry.messaging) {
@@ -83,82 +86,32 @@ app.get('/webhook', (req, res) => {
 
 
 // Handles messages events
-function handleMessage(sender_psid, received_message) {
+function handleMessage(post_id, received_message) {
   let response;
 
     // Check if the message contains text
-    if (received_message.text) {
+    if (received_message) {
       // Create the payload for a basic text message
       response = {
-        "text": `Text message: "${received_message.text}". Wanna try an image?`
+        "text": `Text message: "${received_message}". Wanna try an image?`
       }
-    } else if (received_message.attachments) {
-
-        // Get the URL of the message attachment
-         let attachment_url = received_message.attachments[0].payload.url;
-         response = {
-           "attachment": {
-             "type": "template",
-             "payload": {
-               "template_type": "generic",
-               "elements": [{
-                 "title": "Generic Template Testing",
-                 "subtitle": "Do you want to keep in touch?",
-                 "image_url": attachment_url,
-                 "buttons": [
-                   {
-                     "type": "postback",
-                     "title": "Contact Me",
-                     "payload": "yes",
-                   },
-                   {
-                     "type": "postback",
-                     "title": "No means No!",
-                     "payload": "no",
-                   }
-                 ],
-               }]
-             }
-           }
-         }
     }
-
     // Sends the response message
-    callSendAPI(sender_psid, response);
+    replyToComment(post_id, response);
 }
 
-// Handles messaging_postbacks events
-function handlePostback(sender_psid, received_postback) {
+function replyToComment(post_id, response){
 
-let response;
-
- // Get the payload for the postback
- let payload = received_postback.payload;
-
- // Set the response based on the postback payload
- if (payload === 'yes') {
-   response = { "text": "Cool. Added you to our contact list!" }
- } else if (payload === 'no') {
-   response = { "text": "Oh well. Your loss." }
- }
- // Send the message to acknowledge the postback
- callSendAPI(sender_psid, response);
-
-}
-
-// Sends response messages via the Send API
-function callSendAPI(sender_psid, response) {
-  // Construct the message body
-    let request_body = {
-      "recipient": {
-        "id": sender_psid
-      },
-      "message": response
-    }
+  let request_body = {
+    "recipient": {
+      "id": post_id
+    },
+    "message": response
+  }
 
     // Send the HTTP request to the Messenger Platform
   request({
-    "uri": "https://graph.facebook.com/v2.6/me/messages",
+    "uri": "https://graph.facebook.com/v2.6/me/"+ post_id + "/private_replies",
     "qs": { "access_token": PAGE_ACCESS_TOKEN },
     "method": "POST",
     "json": request_body
