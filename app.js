@@ -124,7 +124,7 @@ function replyToComment(post_comment_id, response){
 
     // Send the HTTP request to the Messenger Platform
   request({
-    "uri": "https://graph.facebook.com/v2.6/me/"+ post_comment_id + "/private_replies",
+    "uri": "https://graph.facebook.com/v2.10/me/"+ post_comment_id + "/private_replies",
     "qs": { "access_token": PAGE_ACCESS_TOKEN },
     "method": "POST",
     "json": request_body
