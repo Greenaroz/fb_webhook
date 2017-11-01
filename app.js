@@ -125,7 +125,7 @@ function replyToComment(post_comment_id, response){
   console.log('POST COMMENT ID = ' + post_comment_id);
   console.log('RESPONSE = ' + JSON.stringify(response));
 
-  let uri = "https://graph.facebook.com/v2.10/me/"${post_comment_id}"/private_replies";
+  let uri = "https://graph.facebook.com/v2.10/me/" + post_comment_id+ "/private_replies";
   console.log('URI = ' + uri);
 
     // Send the HTTP request to the Messenger Platform
