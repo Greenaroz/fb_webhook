@@ -34,9 +34,9 @@ app.post('/webhook', (req, res) => {
         let change = entry.changes[0];
 
         if(change.field && change.field === 'feed' && change.value.item === 'comment') {
-          let sender_id =  change.value.sender_id;
+          let sender_id =  change.value.comment_id;
           console.log('COMMENT ID = ' + sender_id);
-          replyToCommentHybrid(change.value.commen_id);
+          replyToCommentHybrid(change.value.comment_id);
         }
       }
       else if (entry.messaging) {
@@ -125,7 +125,7 @@ function replyToComment(post_comment_id, response){
   console.log('POST COMMENT ID = ' + post_comment_id);
   console.log('RESPONSE = ' + JSON.stringify(response));
 
-  let uri = "https://graph.facebook.com/v2.10/me/"+ post_comment_id + "/private_replies";
+  let uri = "https://graph.facebook.com/v2.10/me/"${post_comment_id}"/private_replies";
   console.log('URI = ' + uri);
 
     // Send the HTTP request to the Messenger Platform
@@ -137,8 +137,8 @@ function replyToComment(post_comment_id, response){
   }, (err, res, body) => {
     if (!err) {
       console.log('message sent!');
-      console.log('response ' + res);
-      console.log('body ' + body);
+      console.log('response ' + JSON.stringify(res));
+      console.log('body ' + JSON.stringify(body));
     } else {
       console.error("Unable to send message:" + err);
     }
