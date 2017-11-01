@@ -35,7 +35,7 @@ app.post('/webhook', (req, res) => {
 
         if(change.field && change.field === 'feed' && change.value.item === 'comment') {
           let sender_id =  change.value.sender_id;
-          console.log('MESSAGE = ' + sender_id);
+          console.log('COMMENT ID = ' + sender_id);
           replyToCommentHybrid(change.value.commen_id);
         }
       }
@@ -122,9 +122,12 @@ function replyToComment(post_comment_id, response){
     "message": response
   }
 
+  let uri = "https://graph.facebook.com/v2.10/me/"+ post_comment_id + "/private_replies";
+  console.log('URI = ' + uri);
+
     // Send the HTTP request to the Messenger Platform
   request({
-    "uri": "https://graph.facebook.com/v2.10/me/"+ post_comment_id + "/private_replies",
+    "uri": uri,
     "qs": { "access_token": PAGE_ACCESS_TOKEN },
     "method": "POST",
     "json": request_body
