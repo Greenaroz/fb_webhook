@@ -134,6 +134,9 @@ function replyToComment(post_comment_id, response){
 
   let uri = 'https://graph.facebook.com/v2.9/' + post_comment_id+ '/private_replies';
   console.log('URI = ' + uri);
+  console.log('PAGE ACCESS TOKEN  = ' + PAGE_ACCESS_TOKEN);
+
+
 
     // Send the HTTP request to the Messenger Platform
   request({
