@@ -17,13 +17,12 @@ app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
 app.post('/webhook', (req, res) => {
 
   let body = req.body;
-  console.log(JSON.stringify(body));
+  console.log('BODY = ' + JSON.stringify(body));
 
 
   let webhook_event;
   // Checks this is an event from a page subscription
   if (body.object === 'page') {
-
 
     // Iterates over each entry - there may be multiple if batched
     body.entry.forEach(function(entry) {
@@ -36,7 +35,7 @@ app.post('/webhook', (req, res) => {
         if(change.field && change.field === 'feed' && change.value.item === 'comment') {
           let sender_id =  change.value.comment_id;
           console.log('COMMENT ID = ' + sender_id);
-          replyToCommentHybrid(change.value.comment_id);
+          replyToCommentSimple(change.value.comment_id);
         }
       }
       else if (entry.messaging) {
@@ -117,6 +116,13 @@ function replyToCommentHybrid(post_comment_id){
   replyToComment(post_comment_id, response);
 }
 
+function replyToCommentSimple(post_comment_id){
+
+  let response = 'Simple text response to a comment on my post';
+
+  replyToComment(post_comment_id, response);
+}
+
 function replyToComment(post_comment_id, response){
 
   let request_body = {
@@ -126,7 +132,7 @@ function replyToComment(post_comment_id, response){
   console.log('POST COMMENT ID = ' + post_comment_id);
   console.log('RESPONSE = ' + JSON.stringify(response));
 
-  let uri = 'https://graph.facebook.com/v2.10/' + post_comment_id+ '/private_replies';
+  let uri = 'https://graph.facebook.com/v2.9/' + post_comment_id+ '/private_replies';
   console.log('URI = ' + uri);
 
     // Send the HTTP request to the Messenger Platform
