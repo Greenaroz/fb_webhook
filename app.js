@@ -41,6 +41,7 @@ app.post('/webhook', (req, res) => {
       }
       else if (entry.messaging) {
         webhook_event = entry.messaging[0];
+        console.log(JSON.stringify(entry.messaging[0]));
       }
 
 
